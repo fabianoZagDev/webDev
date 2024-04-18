@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livraria</title>
+</head>
+<body>
+     <label for="numBooks">Quantos livros você tem??</label>
+     <input type="number" id="numBooks">
+     <button onclick="calcular()">Calcular</button>
+     <h1 id="resultado"></h1>
+
+     <script src="script.js"></script>
+
+     <label for="nivel">Qual seu cargo?</label>
+     <select name="Niveis" id="nivel">
+         <option value="nivel">Júnior</option>
+         <option value="nivel">Pleno</option>
+         <option value="nivel">Senior</option>
+         <option value="nivel">Tech lead</option>
+         <option value="nivel">Diretor</option>
+     </select>
+     <button onclick="salario()">Diga meu salario</button>
+     <h1 id="salarioNiv"></h1>
+</body>
+</html>
