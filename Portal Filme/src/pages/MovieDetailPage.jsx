@@ -6,6 +6,8 @@ export default function MovieDetailPage() {
 
     const [movie, setMovie] = useState({});
     const [trailerKey, setTrailerKey] = useState('');
+    const [toWatch, setToWatch] = useState([]);
+    const [watched, setWatched] = useState([]);
 
     useEffect(() => {
         const fetchMovieDetails = async () => {
@@ -27,8 +29,39 @@ export default function MovieDetailPage() {
         fetchMovieDetails();
     }, [id]);
 
+    useEffect(() => {
+        // Carregar listas do LocalStorage
+        const storedToWatch = JSON.parse(localStorage.getItem('toWatch')) || [];
+        const storedWatched = JSON.parse(localStorage.getItem('watched')) || [];
+        setToWatch(storedToWatch);
+        setWatched(storedWatched);
+    }, []);
+
+    const addToWatch = () => {
+        setToWatch((prev) => {
+            const updatedList = [...prev, movie];
+            localStorage.setItem('toWatch', JSON.stringify(updatedList));
+            return updatedList;
+        });
+    };
+
+    const markAsWatched = () => {
+        setWatched((prev) => {
+            const updatedList = [...prev, movie];
+            localStorage.setItem('watched', JSON.stringify(updatedList));
+            removeFromToWatch(movie.id); // Remove da lista "Para Ver Depois"
+            return updatedList;
+        });
+    };
+
+    const removeFromToWatch = (movieId) => {
+        const updatedList = toWatch.filter((m) => m.id !== movieId);
+        setToWatch(updatedList);
+        localStorage.setItem('toWatch', JSON.stringify(updatedList));
+    };
+
     return (
-        <div className="flex flex-col items-center p-4 max-w-3xl mx-auto"> {/* Largura máxima de 900px */}
+        <div className="flex flex-col items-center p-4 max-w-3xl mx-auto">
             {/* Seção do título e poster */}
             <div className="flex flex-row mb-8 w-full">
                 <img 
@@ -41,6 +74,16 @@ export default function MovieDetailPage() {
                     <p className="mt-2">{movie.overview}</p>
                     <p className="mt-2"><strong>Avaliação:</strong> {movie.vote_average} / 10</p>
                     <p className="mt-2"><strong>Data de Lançamento:</strong> {movie.release_date}</p>
+
+                    {/* Botões para adicionar e marcar como assistido */}
+                    <div className="mt-4">
+                        <button onClick={addToWatch} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                            Adicionar à lista Para Ver Depois
+                        </button>
+                        <button onClick={markAsWatched} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ml-2">
+                            Marcar como Assistido
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -66,7 +109,7 @@ export default function MovieDetailPage() {
                 {movie.credits && movie.credits.cast.map((actor, index) => (
                     <span key={actor.id}>
                         {actor.name} como {actor.character}
-                        {index < movie.credits.cast.length - 1 ? " - " : ""} {/* Adiciona " - " entre os atores, mas não no final */}
+                        {index < movie.credits.cast.length - 1 ? " - " : ""}
                     </span>
                 ))}
             </p>
