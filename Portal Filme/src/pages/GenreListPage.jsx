@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import GenreCard from '../components/GenreCard';
+import GenreCard from '../components/GenreCard'; // Certifique-se de que o caminho está correto
 
-export default function GenresPage() {
+export default function GenreListPage() {
     const [genres, setGenres] = useState([]);
 
     useEffect(() => {
